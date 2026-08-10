@@ -114,9 +114,27 @@ Further reading:
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which typechecks,
-runs the tests, builds, and publishes to GitHub Pages. The build fails the
-deploy if either the typecheck or the tests fail.
+### One-time setup
+
+GitHub Pages has to be switched on by a repository admin before anything can
+publish to it. Creating a Pages site requires admin scope, which the workflow's
+`GITHUB_TOKEN` does not have, so this single step cannot be automated.
+
+Go to **Settings → Pages → Build and deployment → Source** and pick one:
+
+- **GitHub Actions** *(recommended)* — uses `.github/workflows/deploy.yml`,
+  which typechecks and runs the full test suite before publishing and fails the
+  deploy if either fails. After selecting it, re-run the most recent workflow
+  (or push any commit) to trigger the first deploy.
+- **Deploy from a branch → `gh-pages` / `root`** — the `gh-pages` branch already
+  contains a built copy, so the site goes live within about a minute with no
+  further steps. That branch is a one-off snapshot and does not rebuild on push,
+  so prefer the Actions source for ongoing work.
+
+### After that
+
+Pushing to `main` runs the workflow, which typechecks, tests, builds and
+publishes.
 
 The production build sets `base: '/moneymile/'`. If you fork this under a
 different repository name, set `MM_BASE` accordingly.
