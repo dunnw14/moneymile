@@ -114,27 +114,19 @@ Further reading:
 
 ## Deployment
 
-### One-time setup
+Pages is served from **GitHub Actions** (Settings → Pages → Source). Pushing to
+`main` runs `.github/workflows/deploy.yml`, which typechecks, runs the full test
+suite, builds, and publishes — and fails the deploy if the typecheck or tests
+fail.
 
-GitHub Pages has to be switched on by a repository admin before anything can
-publish to it. Creating a Pages site requires admin scope, which the workflow's
-`GITHUB_TOKEN` does not have, so this single step cannot be automated.
+Note that enabling Pages in the first place has to be done by a repository admin
+in Settings: creating a Pages site requires admin scope, which the workflow's
+`GITHUB_TOKEN` does not have, so that one step cannot be automated. It only ever
+needs doing once.
 
-Go to **Settings → Pages → Build and deployment → Source** and pick one:
-
-- **GitHub Actions** *(recommended)* — uses `.github/workflows/deploy.yml`,
-  which typechecks and runs the full test suite before publishing and fails the
-  deploy if either fails. After selecting it, re-run the most recent workflow
-  (or push any commit) to trigger the first deploy.
-- **Deploy from a branch → `gh-pages` / `root`** — the `gh-pages` branch already
-  contains a built copy, so the site goes live within about a minute with no
-  further steps. That branch is a one-off snapshot and does not rebuild on push,
-  so prefer the Actions source for ongoing work.
-
-### After that
-
-Pushing to `main` runs the workflow, which typechecks, tests, builds and
-publishes.
+> There is a leftover `gh-pages` branch from before the Actions source was
+> enabled. It is a one-off snapshot, is not used by anything, and does not
+> rebuild — it can safely be deleted.
 
 The production build sets `base: '/moneymile/'`. If you fork this under a
 different repository name, set `MM_BASE` accordingly.
